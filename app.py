@@ -4,13 +4,20 @@ from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import config
-import pdfkit
+from weasyprint import HTML
 import os
-
 app = Flask(__name__)
 app.config["SECRET_KEY"] = config.SECRET_KEY
-WKHTMLTOPDF_PATH = r"G:\wkhtmltopdf\bin\wkhtmltopdf.exe"  # change if needed
-pdf_config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)
+
+
+WKHTMLTOPDF_PATH = os.environ.get("WKHTMLTOPDF_PATH")
+  # change if needed
+pdf_config = None
+if WKHTMLTOPDF_PATH:
+    try:
+        pdf_config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)
+    except Exception as e:
+        print("wkhtmltopdf not available:", e)
 
 PDF_OPTIONS = {
     "page-size": "A4",

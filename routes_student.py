@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from bson.objectid import ObjectId
 from app import app, db
 from flask import send_file
-import pdfkit
 from app import pdf_config
 from io import BytesIO
 from app import pdf_config, PDF_OPTIONS
@@ -188,7 +187,10 @@ def student_pdf(student_id):
     profile_path = profile_path.replace("\\", "/")
     print("PROFILE FILE:", profile_path)
     html = render_template("report_pdf.html", student=student, profile_path=profile_path)
-    pdf_bytes = pdfkit.from_string(html, False, configuration=pdf_config, options=PDF_OPTIONS)
+
+    # use shared pdf_config
+    pdf_bytes = HTML(string=html).write_pdf()
+
 
     return send_file(
         BytesIO(pdf_bytes),
