@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card card-shadow">
+  <div class="card-body">
+    <h3 class="card-title mb-3">
+      {% if mode == 'edit' %}Edit Student Report{% else %}Create Student Report{% endif %}
+    </h3>
+
+    <form method="post">
+      <!-- STUDENT DETAILS -->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label">School Name</label>
+          <input class="form-control" name="school_name" value="{{ student.school_name if student is defined else '' }}"
+            required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Academic Year</label>
+          <input class="form-control" name="academic_year"
+            value="{{ student.academic_year if student is defined else '' }}" placeholder="2024-25" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Student Name</label>
+          <input class="form-control" name="student_name"
+            value="{{ student.student_name if student is defined else '' }}" required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Class</label>
+          <input class="form-control" name="class_name" value="{{ student.class_name if student is defined else '' }}"
+            required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Division</label>
+          <input class="form-control" name="division" value="{{ student.division if student is defined else '' }}"
+            required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Roll No</label>
+          <input class="form-control" name="roll_no" value="{{ student.roll_no if student is defined else '' }}"
+            required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Parent Contact</label>
+          <input class="form-control" name="parent_contact"
+            value="{{ student.parent_contact if student is defined else '' }}" placeholder="+91-9876543210">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label">Address</label>
+          <textarea class="form-control" name="address" rows="2">
+{{ student.address if student is defined else '' }}</textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Profile Photo (URL or path)</label>
+          <input class="form-control" name="profile_photo"
+            value="{{ student.profile_photo if student is defined else '' }}"
+            placeholder="e.g., static/images/students/deeksha.jpg">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+  <div class="col-md-6">
+    <label class="form-label">Class Teacher Remark</label>
+    <textarea class="form-control" name="teacher_remark" rows="2">{{ student.teacher_remark if student is defined else '' }}</textarea>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Principal Remark</label>
+    <textarea class="form-control" name="principal_remark" rows="2">{{ student.principal_remark if student is defined else '' }}</textarea>
+  </div>
+</div>
+
+      <hr>
+      <h5>Subjects & Marks</h5>
+
+      <div id="subjects-container">
+        {% if student is defined %}
+        {% for sub in student.subjects %}
+        <div class="row g-2 mb-2 subject-row">
+          <div class="col-md-6">
+            <input class="form-control" name="subject_name" value="{{ sub.name }}" placeholder="Subject Name" required>
+          </div>
+          <div class="col-md-3">
+            <input class="form-control" type="number" name="max_marks" value="{{ sub.max_marks }}"
+              placeholder="Max Marks" required>
+          </div>
+          <div class="col-md-3">
+            <input class="form-control" type="number" name="obtained_marks" value="{{ sub.obtained_marks }}"
+              placeholder="Obtained Marks" required>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="row g-2 mb-2 subject-row">
+          <div class="col-md-6">
+            <input class="form-control" name="subject_name" placeholder="Subject Name" required>
+          </div>
+          <div class="col-md-3">
+            <input class="form-control" type="number" name="max_marks" placeholder="Max Marks" required>
+          </div>
+          <div class="col-md-3">
+            <input class="form-control" type="number" name="obtained_marks" placeholder="Obtained Marks" required>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <button type="button" class="btn btn-outline-secondary btn-sm mb-3" onclick="addSubjectRow()">
+        + Add Subject
+      </button>
+
+      <div class="text-end">
+        <button class="btn btn-primary" type="submit">
+          {% if mode == 'edit' %}Update Report{% else %}Generate Report{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function addSubjectRow() {
+    const container = document.getElementById('subjects-container');
+    const row = document.createElement('div');
+    row.className = 'row g-2 mb-2 subject-row';
+    row.innerHTML = `
+    <div class="col-md-6">
+      <input class="form-control" name="subject_name" placeholder="Subject Name" required>
+    </div>
+    <div class="col-md-3">
+      <input class="form-control" type="number" name="max_marks" placeholder="Max Marks" required>
+    </div>
+    <div class="col-md-3">
+      <input class="form-control" type="number" name="obtained_marks" placeholder="Obtained Marks" required>
+    </div>`;
+    container.appendChild(row);
+  }
+</script>
+
+{% endblock %}

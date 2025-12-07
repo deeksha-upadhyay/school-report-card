@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Report Card</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            background-color: #faf6e9;
+            margin: 40px;
+        }
+
+        .card {
+            border: 2px solid #d3c6a2;
+            padding: 20px 25px;
+            background-color: #fffdf5;
+        }
+
+        .top-bar {
+            display: table;
+            width: 100%;
+
+
+            margin-bottom: 6px;
+        }
+
+        .top-logo {
+            display: table-cell;
+            width: 10%;
+            vertical-align: middle;
+            text-align: left;
+        }
+
+        .top-logo img {
+            max-height: 70px;
+            max-width: 70px;
+            width: auto;
+            height: auto;
+        }
+
+        .top-school {
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+            width: 92%;
+        }
+
+        .top-school h1 {
+            font-size: 20px;
+            margin: 0;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+
+        }
+
+        .year-bar {
+            text-align: center;
+            padding: 6px 0;
+
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .info-table,
+        .marks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        .info-table td {
+            border: 1px solid #d3c6a2;
+            padding: 6px 8px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            width: 20%;
+        }
+
+        .marks-table th {
+            background-color: #e5dfc8;
+            border: 1px solid #a89d7b;
+            padding: 6px;
+        }
+
+        .marks-table td {
+            border: 1px solid #d3c6a2;
+            padding: 6px;
+            text-align: center;
+        }
+
+        .footer-row {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .footer-cell {
+            display: inline-block;
+            width: 30%;
+        }
+    </style>
+</head>
+
+<body>
+    {% set logo_path = 'file:///C:/Users/admin/Desktop/school_report_card/static/images/logo.png' %}
+
+    <div class="card">
+        <!-- TOP HEADER: logo left, school name center -->
+        <div class="top-bar">
+            <div class="top-logo">
+                <img src="{{ logo_path }}" alt="Logo">
+            </div>
+            <div class="top-school">
+                <h1>{{ student.school_name }}</h1>
+            </div>
+        </div>
+
+        <!-- ACADEMIC YEAR FULL BAR -->
+        <div class="year-bar">
+            Academic Year: {{ student.academic_year }}
+        </div>
+
+        {% if profile_path %}
+        <div style="text-align:center; margin:15px 0;">
+            <img src="file:///{{ profile_path }}" alt="Profile Photo"
+                style="height:120px; width:120px; object-fit:cover; border-radius:8px; border:1px solid #333;">
+        </div>
+        {% endif %}
+
+
+
+        <!-- STUDENT INFO BOX -->
+        <table class="info-table">
+            <tr>
+                <td class="info-label">Student Name</td>
+                <td>{{ student.student_name }}</td>
+                <td class="info-label">Roll No</td>
+                <td>{{ student.roll_no }}</td>
+            </tr>
+            <tr>
+                <td class="info-label">Class / Div</td>
+                <td>{{ student.class_name }} - {{ student.division }}</td>
+                <td class="info-label">Address</td>
+                <td>{{ student.address }}</td>
+            </tr>
+        </table>
+
+        <!-- MARKS TABLE -->
+        <table class="marks-table">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Max Marks</th>
+                    <th>Marks Obtained</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in student.subjects %}
+                <tr>
+                    <td style="text-align:left;">{{ sub.name }}</td>
+                    <td>{{ sub.max_marks }}</td>
+                    <td>{{ sub.obtained_marks }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th style="text-align:left;">Total</th>
+                    <th>{{ student.total_max }}</th>
+                    <th>{{ student.total_obtained }}</th>
+                </tr>
+                <tr>
+                    <th style="text-align:left;">Percentage / Grade</th>
+                    <th colspan="2">{{ student.percentage }} % ({{ student.grade }})</th>
+                </tr>
+            </tfoot>
+        </table>
+        <table class="info-table" style="margin-top:15px;">
+            <tr>
+                <td class="info-label">Class Teacher Remark</td>
+                <td>{{ student.teacher_remark }}</td>
+            </tr>
+            <tr>
+                <td class="info-label">Principal Remark</td>
+                <td>{{ student.principal_remark }}</td>
+            </tr>
+        </table>
+
+
+        <div class="footer-row">
+            <div class="footer-cell">
+                ____________________<br>Principal Signature
+            </div>
+            <div class="footer-cell">
+                ____________________<br>Class Teacher Signature
+            </div>
+            <div class="footer-cell">
+                ____________________<br>Parent Signature
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

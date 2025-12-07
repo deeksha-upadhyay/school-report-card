@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row mb-3">
+  <div class="col-md-8">
+    <h3 class="page-title">Welcome, {{ name }}</h3>
+    <p class="text-muted mb-0">Manage students and generate professional report cards.</p>
+  </div>
+  <div class="col-md-4 text-md-end mt-3 mt-md-0">
+    <a href="{{ url_for('new_student') }}" class="btn btn-accent">
+      + Create New Report
+    </a>
+  </div>
+</div>
+
+{% if students %}
+<div class="card card-shadow">
+  <div class="card-body">
+    <h5 class="mb-3">Your Students</h5>
+    <table class="table align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Student</th>
+          <th>Class</th>
+          <th>Roll</th>
+          <th>Year</th>
+          <th>Grade</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ s.student_name }}</td>
+          <td>{{ s.class_name }} - {{ s.division }}</td>
+          <td>{{ s.roll_no }}</td>
+          <td>{{ s.academic_year }}</td>
+          <td>
+            <span class="badge bg-primary">{{ s.grade }}</span>
+          </td>
+          <td>
+            <a href="{{ url_for('preview_report', student_id=s._id) }}" class="btn btn-sm btn-outline-primary">View</a>
+            <a href="{{ url_for('edit_student', student_id=s._id) }}"
+              class="btn btn-sm btn-outline-secondary ms-1">Edit</a>
+              <form method="post"
+      action="{{ url_for('delete_student', student_id=s._id) }}"
+      style="display:inline;"
+      onsubmit="return confirm('Delete this student report?');">
+  <button class="btn btn-sm btn-outline-danger">Delete</button>
+</form>
+
+          </td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="card card-shadow">
+  <div class="card-body text-center">
+    <h5 class="mb-2">No students yet</h5>
+    <p class="text-muted mb-3">Start by creating your first report card.</p>
+    <a href="{{ url_for('new_student') }}" class="btn btn-accent">
+      + Create New Report
+    </a>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

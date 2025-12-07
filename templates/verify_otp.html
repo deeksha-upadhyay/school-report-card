@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card card-shadow">
+      <div class="card-body">
+        <h3 class="mb-3">Verify Email</h3>
+        <p class="text-muted">
+          An OTP has been sent to <strong>{{ email }}</strong>. Enter it below.
+        </p>
+
+        <form method="post">
+          <input type="hidden" name="email" value="{{ email }}">
+          <div class="mb-3">
+            <label class="form-label">OTP</label>
+            <input class="form-control" name="otp" placeholder="Enter 6-digit OTP" required>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <a href="{{ url_for('resend_otp', email=email) }}" class="btn btn-outline-secondary btn-sm">
+              Resend OTP
+            </a>
+            <button class="btn btn-primary" type="submit">Verify</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

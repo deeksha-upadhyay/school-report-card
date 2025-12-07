@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .hero-section {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #fef6e4, #f1f5ff);
+    border-radius: 18px;
+    padding: 40px 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: #fff;
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    color: #6c757d;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    margin-bottom: 10px;
+  }
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+  .hero-subtitle {
+    font-size: 1.05rem;
+    color: #6c757d;
+  }
+  .hero-highlight {
+    color: #e67e22;
+  }
+  .floating-card {
+    animation: float 4s ease-in-out infinite;
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+  }
+  .hero-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.8);
+    z-index: 0;
+  }
+  .hero-circle.c1 { width: 120px; height: 120px; top: -40px; right: -30px;}
+  .hero-circle.c2 { width: 80px; height: 80px; bottom: -20px; left: -10px; opacity: 0.7;}
+  @keyframes float {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .section-title {
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .section-sub {
+    text-align: center;
+    color: #6c757d;
+    margin-bottom: 2rem;
+  }
+
+  .feature-card {
+    border-radius: 14px;
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  }
+  .feature-icon {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+  }
+
+  .steps-line {
+    border-top: 1px dashed #d3c6a2;
+    margin: 20px 0;
+  }
+  .step-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #f5f1e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #6c4f2a;
+    margin-bottom: 8px;
+  }
+</style>
+
+<div class="container py-5">
+
+  <!-- HERO -->
+  <div class="hero-section mb-5">
+    <div class="hero-circle c1"></div>
+    <div class="hero-circle c2"></div>
+
+    <div class="row w-100 position-relative" style="z-index:1;">
+      <div class="col-md-7">
+        <div class="hero-badge">
+          A simple tool for teachers · Secure · Printable
+        </div>
+        <h1 class="hero-title mb-3">
+          Smart <span class="hero-highlight">Report Cards</span><br>
+          for Growing Schools
+        </h1>
+        <p class="hero-subtitle mb-4">
+          Design and download professional report cards with your school logo,
+          student photograph, auto‑calculated marks and grades — all in a few clicks.
+        </p>
+        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg me-2">Login as Professor</a>
+        <a href="{{ url_for('signup') }}" class="btn btn-outline-primary btn-lg">Create Account</a>
+      </div>
+
+      <div class="col-md-5 mt-4 mt-md-0">
+        <div class="card floating-card">
+          <div class="card-body">
+            <h5 class="mb-3">At a Glance</h5>
+            <p class="mb-2">• Generate PDF report cards with school branding.</p>
+            <p class="mb-2">• Attach student photographs and detailed remarks.</p>
+            <p class="mb-2">• Class-wise dashboard with quick access to reports.</p>
+            <p class="mb-0">• Email OTP login to keep data safe.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="row">
+    <div class="col-12">
+      <h3 class="section-title">Key Features</h3>
+      <p class="section-sub">Built to match real report card workflows in schools.</p>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card feature-card h-100 text-center p-3">
+        <div class="feature-icon">📄</div>
+        <h5>Beautiful PDF Layout</h5>
+        <p class="text-muted">
+          Classic report card style with school logo, borders, signatures, and percentage/grade summary.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card feature-card h-100 text-center p-3">
+        <div class="feature-icon">🧒</div>
+        <h5>Student Photos & Details</h5>
+        <p class="text-muted">
+          Attach student photographs, address, and custom remarks from class teacher and principal.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card feature-card h-100 text-center p-3">
+        <div class="feature-icon">🔐</div>
+        <h5>OTP‑Based Professor Login</h5>
+        <p class="text-muted">
+          Only verified professors can create or edit student records, keeping the data secure.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="steps-line"></div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <h3 class="section-title">How it works</h3>
+      <p class="section-sub">Just three steps from signup to printed report cards.</p>
+    </div>
+
+    <div class="col-md-4 mb-4 text-center">
+      <div class="step-circle">1</div>
+      <h6>Sign up & Verify</h6>
+      <p class="text-muted mb-0">
+        Create a professor account and verify your email using the OTP sent to you.
+      </p>
+    </div>
+
+    <div class="col-md-4 mb-4 text-center">
+      <div class="step-circle">2</div>
+      <h6>Add Students</h6>
+      <p class="text-muted mb-0">
+        Enter student details, marks for each subject, remarks, and upload photographs.
+      </p>
+    </div>
+
+    <div class="col-md-4 mb-4 text-center">
+      <div class="step-circle">3</div>
+      <h6>Download Report Cards</h6>
+      <p class="text-muted mb-0">
+        Preview and download neatly formatted PDF report cards ready to print or share.
+      </p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

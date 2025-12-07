@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card card-shadow">
+  <div class="card-body">
+    <!-- Header with school info + logo on right -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h2>{{ student.school_name }}</h2>
+        <p><strong>Academic Year:</strong> {{ student.academic_year }}</p>
+      </div>
+      <div>
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height:70px;">
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <p><strong>Student Name:</strong> {{ student.student_name }}</p>
+        <p><strong>Class/Div:</strong> {{ student.class_name }} - {{ student.division }}</p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Roll No:</strong> {{ student.roll_no }}</p>
+        <p><strong>Address:</strong> {{ student.address }}</p>
+      </div>
+       <div class="col-md-6 text-end">
+    {% if student.profile_photo %}
+      <img src="{{ url_for('static', filename=student.profile_photo) }}"
+           alt="Profile Photo"
+          style="height:150px; width:150px; object-fit:cover; border-radius:8px; border:1px solid #ddd;">
+    {% endif %}
+  </div>
+    </div>
+
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>Subject</th>
+          <th>Max Marks</th>
+          <th>Marks Obtained</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sub in student.subjects %}
+        <tr>
+          <td>{{ sub.name }}</td>
+          <td>{{ sub.max_marks }}</td>
+          <td>{{ sub.obtained_marks }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>Total</th>
+          <th>{{ student.total_max }}</th>
+          <th>{{ student.total_obtained }}</th>
+        </tr>
+        <tr>
+          <th colspan="2">Percentage</th>
+          <th>{{ student.percentage }} % (Grade {{ student.grade }})</th>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="row mt-3">
+      <div class="col-md-6">
+        <p><strong>Class Teacher Remark:</strong></p>
+        <p>{{ student.teacher_remark }}</p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Principal Remark:</strong></p>
+        <p>{{ student.principal_remark }}</p>
+      </div>
+    </div>
+
+
+    <div class="row mt-4">
+      <div class="col-md-4 text-center">
+        <p>____________________</p>
+        <p>Principal Signature</p>
+      </div>
+      <div class="col-md-4 text-center">
+        <p>____________________</p>
+        <p>Class Teacher Signature</p>
+      </div>
+      <div class="col-md-4 text-center">
+        <p>____________________</p>
+        <p>Parent Signature</p>
+      </div>
+    </div>
+
+    <div class="mt-3 text-end">
+      <a href="{{ url_for('student_pdf', student_id=student._id) }}" class="btn btn-primary">
+        Download PDF
+      </a>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

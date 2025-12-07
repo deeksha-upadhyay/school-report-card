@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>School Report Card</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #fef6e4, #f5f7fb);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .navbar {
+  background: linear-gradient(120deg, #163965, #1f4f8f, #2459a5);
+  background-size: 200% 200%;
+  animation: navGradient 8s ease infinite;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+  min-height: 64px;
+}
+
+@keyframes navGradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.navbar-brand img {
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.navbar-nav .nav-link {
+  position: relative;
+}
+
+.navbar-nav .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 2px;
+  background-color: #f4b41a;
+  transition: width 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover::after {
+  width: 100%;
+}
+
+    
+    .page-wrapper {
+      padding: 20px 0 40px;
+    }
+
+    .card-shadow {
+      background-color: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e1e5f0;
+      box-shadow: 0 10px 28px rgba(15, 35, 70, 0.10);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card-shadow:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(15, 35, 70, 0.15);
+    }
+
+    .btn-primary {
+      background-color: #1f4f8f;
+      border-color: #1f4f8f;
+    }
+
+    .btn-primary:hover {
+      background-color: #163965;
+      border-color: #163965;
+    }
+
+    .btn-accent {
+      background-color: #f4b41a;
+      border-color: #f4b41a;
+      color: #1b1b1b;
+      font-weight: 500;
+    }
+
+    .btn-accent:hover {
+      background-color: #d89f16;
+      border-color: #d89f16;
+      color: #111;
+    }
+
+    .page-title {
+      font-weight: 600;
+      color: #1f2a3c;
+    }
+
+    .alert {
+      border-radius: 999px;
+      padding-left: 18px;
+      padding-right: 18px;
+    }
+
+    .nav-logo {
+  height: 32px;
+  margin-right: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.logo-hover-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.logo-hover-popup {
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 1050;
+}
+
+.logo-hover-popup img {
+  max-width: 180px;
+  max-height: 180px;
+}
+
+.logo-hover-wrapper:hover .logo-hover-popup {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(4px);
+}
+
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark mb-3">
+    <div class="container">
+      <!-- Brand + Logo -->
+     <a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
+  <div class="logo-hover-wrapper">
+    <img src="{{ url_for('static', filename='images/logo.png') }}"
+         alt="Logo" class="nav-logo">
+    <div class="logo-hover-popup">
+      <img src="{{ url_for('static', filename='images/logo.png') }}"
+           alt="Logo big">
+    </div>
+  </div>
+  Report Card System
+</a>
+
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('new_student') }}">New Report</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container page-wrapper">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, msg in messages %}
+        <div class="alert alert-{{ category }} fade show mt-2" role="alert">
+          {{ msg }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // auto-dismiss bootstrap alerts after 5 seconds
+    setTimeout(function () {
+  document.querySelectorAll('.alert').forEach(function (el) {
+    el.classList.remove('show');
+    el.classList.add('fade');
+    setTimeout(function () { el.remove(); }, 100);
+  });
+}, 5000);
+
+  </script>
+
+</body>
+
+</html>
