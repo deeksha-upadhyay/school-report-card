@@ -6,6 +6,9 @@ import random
 import smtplib
 from email.mime.text import MIMEText
 import config
+import os
+
+USE_SMTP = os.environ.get("USE_SMTP", "false").lower() == "true"
 
 
 # ---------- HELPER: SEND OTP EMAIL ----------
@@ -22,8 +25,26 @@ import config
 #         server.send_message(msg)
 
 def send_otp_email(email, otp_code):
-    # Render demo: log OTP instead of sending email (SMTP often blocked)
-    print("OTP for", email, "is", otp_code)
+    message = f"Your login OTP is: {otp_code}"
+
+    if not USE_SMTP:
+        # Demo mode: show OTP on screen instead of email
+        flash(f"Demo OTP for {email}: {otp_code}", "info")
+        return
+
+    import smtplib
+    from email.mime.text import MIMEText
+
+    msg = MIMEText(message)
+    msg["Subject"] = "Your Report Card System OTP"
+    msg["From"] = config.SMTP_USER
+    msg["To"] = email
+
+    with smtplib.SMTP(config.SMTP_SERVER, config.SMTP_PORT) as server:
+        server.starttls()
+        server.login(config.SMTP_USER, config.SMTP_PASSWORD)
+        server.send_message(msg)
+
 
 
 # ---------- ROUTES ----------

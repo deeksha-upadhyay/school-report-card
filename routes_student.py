@@ -1,14 +1,10 @@
-from flask import render_template, redirect, url_for, request, flash
+from flask import render_template, redirect, url_for, request, flash, send_file
 from flask_login import login_required, current_user
 from bson.objectid import ObjectId
 from app import app, db
-from flask import send_file
 from io import BytesIO
+from weasyprint import HTML
 import os
-# at top of file
-
-
-
 
 def calculate_grade(percentage):
     if percentage >= 90:
@@ -21,6 +17,7 @@ def calculate_grade(percentage):
         return "D"
     else:
         return "E"
+
 
 @app.route("/student/new", methods=["GET", "POST"])
 @login_required
@@ -38,7 +35,8 @@ def new_student():
         subject_names = request.form.getlist("subject_name")
         max_marks_list = request.form.getlist("max_marks")
         obtained_list = request.form.getlist("obtained_marks")
-        profile_photo = request.form.get("profile_photo")
+        profile_photo = request.form.get("profile_photo")  # e.g. "images/students/deeksha.jpg"
+
         subjects = []
         total_max = 0
         total_obtained = 0
@@ -76,7 +74,6 @@ def new_student():
             "total_obtained": total_obtained,
             "percentage": round(percentage, 2),
             "grade": grade
-            
         }
 
         result = db.students.insert_one(student_doc)
@@ -110,6 +107,7 @@ def edit_student(student_id):
         max_marks_list = request.form.getlist("max_marks")
         obtained_list = request.form.getlist("obtained_marks")
         profile_photo = request.form.get("profile_photo")
+
         subjects = []
         total_max = 0
         total_obtained = 0
@@ -154,8 +152,8 @@ def edit_student(student_id):
         flash("Student report updated", "success")
         return redirect(url_for("preview_report", student_id=student_id))
 
-    # GET – show form with existing data
     return render_template("student_form.html", student=student, mode="edit")
+
 
 @app.route("/student/<student_id>/preview")
 @login_required
@@ -181,14 +179,14 @@ def student_pdf(student_id):
 
     profile_path = None
     if student.get("profile_photo"):
+        # student['profile_photo'] should be like "images/students/deeksha.jpg"
         profile_path = os.path.abspath(os.path.join("static", student["profile_photo"]))
-    profile_path = profile_path.replace("\\", "/")
+        profile_path = profile_path.replace("\\", "/")
+
     print("PROFILE FILE:", profile_path)
+
     html = render_template("report_pdf.html", student=student, profile_path=profile_path)
-
-    # # use shared pdf_config
-    # pdf_bytes = HTML(string=html).write_pdf()
-
+    pdf_bytes = HTML(string=html).write_pdf()
 
     return send_file(
         BytesIO(pdf_bytes),
@@ -196,16 +194,6 @@ def student_pdf(student_id):
         download_name=f"{student['student_name']}_report.pdf",
         mimetype="application/pdf"
     )
-
-    
-
-    return send_file(
-        BytesIO(pdf_bytes),
-        as_attachment=True,
-        download_name=f"{student['student_name']}_report.pdf",
-        mimetype="application/pdf"
-    )
-
 
 
 @app.route("/student/<student_id>/delete", methods=["POST"])
