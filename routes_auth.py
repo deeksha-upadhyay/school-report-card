@@ -10,16 +10,20 @@ import config
 
 # ---------- HELPER: SEND OTP EMAIL ----------
 
-def send_otp_email(to_email, otp_code):
-    msg = MIMEText(f"Your verification OTP is: {otp_code}")
-    msg["Subject"] = "Professor Signup Verification OTP"
-    msg["From"] = config.SMTP_USER
-    msg["To"] = to_email
+# def send_otp_email(to_email, otp_code):
+#     msg = MIMEText(f"Your verification OTP is: {otp_code}")
+#     msg["Subject"] = "Professor Signup Verification OTP"
+#     msg["From"] = config.SMTP_USER
+#     msg["To"] = to_email
 
-    with smtplib.SMTP(config.SMTP_SERVER, config.SMTP_PORT) as server:
-        server.starttls()
-        server.login(config.SMTP_USER, config.SMTP_PASSWORD)
-        server.send_message(msg)
+#     with smtplib.SMTP(config.SMTP_SERVER, config.SMTP_PORT) as server:
+#         server.starttls()
+#         server.login(config.SMTP_USER, config.SMTP_PASSWORD)
+#         server.send_message(msg)
+
+def send_otp_email(email, otp_code):
+    # Render demo: log OTP instead of sending email (SMTP often blocked)
+    print("OTP for", email, "is", otp_code)
 
 
 # ---------- ROUTES ----------
