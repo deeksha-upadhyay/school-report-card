@@ -6,6 +6,7 @@ from io import BytesIO
 from weasyprint import HTML
 import os
 
+
 def calculate_grade(percentage):
     if percentage >= 90:
         return "A"
@@ -35,7 +36,8 @@ def new_student():
         subject_names = request.form.getlist("subject_name")
         max_marks_list = request.form.getlist("max_marks")
         obtained_list = request.form.getlist("obtained_marks")
-        profile_photo = request.form.get("profile_photo")  # e.g. "images/students/deeksha.jpg"
+        # e.g. "images/students/deeksha.jpg" (no leading 'static/')
+        profile_photo = request.form.get("profile_photo")
 
         subjects = []
         total_max = 0
@@ -179,13 +181,22 @@ def student_pdf(student_id):
 
     profile_path = None
     if student.get("profile_photo"):
-        # student['profile_photo'] should be like "images/students/deeksha.jpg"
+        # e.g. static/images/students/deeksha.jpg on disk
         profile_path = os.path.abspath(os.path.join("static", student["profile_photo"]))
         profile_path = profile_path.replace("\\", "/")
 
-    print("PROFILE FILE:", profile_path)
+    logo_path = os.path.abspath(os.path.join("static", "images", "logo.png"))
+    logo_path = logo_path.replace("\\", "/")
 
-    html = render_template("report_pdf.html", student=student, profile_path=profile_path)
+    print("PROFILE FILE:", profile_path)
+    print("LOGO FILE:", logo_path)
+
+    html = render_template(
+        "report_pdf.html",
+        student=student,
+        profile_path=profile_path,
+        logo_path=logo_path
+    )
     pdf_bytes = HTML(string=html).write_pdf()
 
     return send_file(
