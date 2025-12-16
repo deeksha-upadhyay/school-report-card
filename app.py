@@ -10,14 +10,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = config.SECRET_KEY
 
 
-WKHTMLTOPDF_PATH = os.environ.get("WKHTMLTOPDF_PATH")
-  # change if needed
-pdf_config = None
-if WKHTMLTOPDF_PATH:
-    try:
-        pdf_config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)
-    except Exception as e:
-        print("wkhtmltopdf not available:", e)
+
 
 PDF_OPTIONS = {
     "page-size": "A4",

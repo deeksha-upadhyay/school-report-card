@@ -199,7 +199,7 @@ def student_pdf(student_id):
         mimetype="application/pdf"
     )
 
-    pdf_bytes = pdfkit.from_string(html, False, configuration=pdf_config, options=PDF_OPTIONS)
+    
 
     return send_file(
         BytesIO(pdf_bytes),
