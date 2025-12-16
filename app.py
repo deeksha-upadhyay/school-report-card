@@ -12,12 +12,6 @@ app.config["SECRET_KEY"] = config.SECRET_KEY
 
 
 
-PDF_OPTIONS = {
-    "page-size": "A4",
-    "encoding": "UTF-8",
-    "enable-local-file-access": None
-}
-
 
 client = MongoClient(config.MONGO_URI)
 db = client["school_report_card_db"]

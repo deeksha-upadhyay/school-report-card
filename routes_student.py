@@ -3,9 +3,7 @@ from flask_login import login_required, current_user
 from bson.objectid import ObjectId
 from app import app, db
 from flask import send_file
-from app import pdf_config
 from io import BytesIO
-from app import pdf_config, PDF_OPTIONS
 import os
 # at top of file
 
@@ -188,8 +186,8 @@ def student_pdf(student_id):
     print("PROFILE FILE:", profile_path)
     html = render_template("report_pdf.html", student=student, profile_path=profile_path)
 
-    # use shared pdf_config
-    pdf_bytes = HTML(string=html).write_pdf()
+    # # use shared pdf_config
+    # pdf_bytes = HTML(string=html).write_pdf()
 
 
     return send_file(
